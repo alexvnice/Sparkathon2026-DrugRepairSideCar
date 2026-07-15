@@ -1,0 +1,8 @@
+# Never publish git internals or OS noise
+.git/
+.DS_Store
+Thumbs.db
+
+# Local dev
+*.log
+node_modules/

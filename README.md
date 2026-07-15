@@ -15,12 +15,15 @@ Demo site compares before/after transcriptions across four fix strategies.
 ## Repo structure
 
 ```
-├── index.html          # Demo / judging page
-├── styles.css
-├── app.js
-├── data/
-│   └── demos.json      # Cases: audio path, transcripts, metrics, fix details
-└── audio/              # WAV files (add before deploy)
+├── site/               # Everything Cloudflare Pages serves (output dir = site)
+│   ├── index.html
+│   ├── styles.css
+│   ├── app.js
+│   ├── data/
+│   │   └── demos.json
+│   └── audio/          # WAV files go here
+├── .gitignore
+└── README.md
 ```
 
 ## Running locally
@@ -40,16 +43,16 @@ python -m http.server 8080
 3. Settings:
    - **Production branch:** `main`
    - **Build command:** `exit 0`
-   - **Build output directory:** `.`
+   - **Build output directory:** `site`
 4. Click **Save and Deploy**. You'll get a `*.pages.dev` URL.
 
 ## Adding real audio
 
-Drop WAV files into `audio/` matching the paths in `data/demos.json`, e.g.:
+Drop WAV files into `site/audio/` matching the paths in `data/demos.json`, e.g.:
 
 ```
-audio/case001.wav
-audio/case002.wav
+site/audio/case001.wav
+site/audio/case002.wav
 ...
 ```
 
