@@ -1,0 +1,9 @@
+{
+  "name": "sparkathon2026-drug-repair-side-car",
+  "compatibility_date": "2026-07-15",
+  "main": "src/index.js",
+  "assets": {
+    "directory": "./site",
+    "binding": "ASSETS"
+  }
+}
