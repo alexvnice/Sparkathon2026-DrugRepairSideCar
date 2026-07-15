@@ -7,19 +7,19 @@
   },
   "cases": [
     {
-      "id": "case-001",
-      "fix_type": "text-postprocess",
-      "audio": "audio/case001.wav",
-      "reference":   "the patient was prescribed metformin 500 milligrams twice daily",
-      "before":      "the patient was prescribed met forming 500 milligrams twice daily",
-      "after":       "the patient was prescribed metformin 500 milligrams twice daily",
-      "wer_before":  0.143,
+      "id": "DR1-4v-turn13",
+      "fix_type": "term-boost",
+      "audio": "audio/DR1_4v_turn13_clopidogrel_amlodipine.wav",
+      "reference":   "continue clopidogrel 75 milligrams and amlodipine 5 milligrams",
+      "before":      "continue clo pied a girl 75 milligrams and am low deep een 5 milligrams",
+      "after":       "continue clopidogrel 75 milligrams and amlodipine 5 milligrams",
+      "wer_before":  0.545,
       "wer_after":   0.0,
       "fix_detail": {
-        "method": "dictionary_lookup",
-        "matched_fragment": "met forming",
-        "canonical_form":   "metformin",
-        "confidence":       0.97
+        "method":        "hotword_boost",
+        "boosted_terms": ["clopidogrel", "amlodipine"],
+        "boost_weight":  12.5,
+        "decoder":       "whisper-medium"
       }
     },
     {
