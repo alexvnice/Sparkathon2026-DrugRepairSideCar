@@ -1,0 +1,168 @@
+/* ── Reset / base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #f8f8fb;
+  color: #1a1a2e;
+  line-height: 1.5;
+}
+
+a { text-decoration: none; color: #464feb; }
+a:hover { text-decoration: underline; }
+
+/* ── Header ── */
+header {
+  background: #1a1a2e;
+  color: #fff;
+  padding: 2rem;
+  text-align: center;
+}
+header h1 { font-size: 2rem; letter-spacing: -0.5px; }
+header .subtitle { margin-top: 0.4rem; color: #a0a8d0; font-size: 0.95rem; }
+
+/* ── Main container ── */
+main { max-width: 1100px; margin: 0 auto; padding: 2rem 1rem; }
+
+/* ── Metrics summary ── */
+#metrics-summary {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.metric-card {
+  flex: 1 1 180px;
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 10px;
+  padding: 1.2rem 1.5rem;
+  text-align: center;
+}
+.metric-card.highlight { border-color: #464feb; background: #f0f1ff; }
+.metric-value { display: block; font-size: 2rem; font-weight: 700; color: #1a1a2e; }
+.metric-card.highlight .metric-value { color: #464feb; }
+.metric-label { font-size: 0.8rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* ── Filters ── */
+#filters {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+#filters label { font-size: 0.9rem; color: #555; margin-right: 0.25rem; }
+.filter-btn {
+  border: 1px solid #ccc;
+  background: #fff;
+  border-radius: 999px;
+  padding: 0.3rem 0.9rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+.filter-btn:hover { border-color: #464feb; }
+.filter-btn.active { background: #464feb; color: #fff; border-color: #464feb; }
+
+/* ── Demo grid ── */
+#demo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
+  gap: 1.5rem;
+}
+
+/* ── Demo card ── */
+.demo-card {
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 10px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transition: box-shadow 0.15s;
+}
+.demo-card:hover { box-shadow: 0 4px 16px rgba(70,79,235,0.1); }
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.case-id { font-size: 0.85rem; color: #888; }
+
+/* Fix-type badges */
+.fix-badge {
+  border-radius: 999px;
+  padding: 0.2rem 0.7rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.fix-badge[data-type="text-postprocess"]  { background: #e8f5e9; color: #2e7d32; }
+.fix-badge[data-type="term-boost"]        { background: #e3f2fd; color: #1565c0; }
+.fix-badge[data-type="redecode"]          { background: #fff3e0; color: #e65100; }
+.fix-badge[data-type="prompt-history"]    { background: #f3e5f5; color: #6a1b9a; }
+
+/* Audio */
+.audio-row { display: flex; align-items: center; gap: 0.75rem; }
+.audio-row label { font-size: 0.85rem; color: #555; white-space: nowrap; }
+.audio-row audio { width: 100%; }
+
+/* Transcript compare */
+.transcript-compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+.transcript-block {
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+  padding: 0.75rem;
+}
+.transcript-block.before { background: #fff8f8; }
+.transcript-block.after  { background: #f5fff7; }
+.transcript-block h3 {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #888;
+  margin-bottom: 0.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.transcript-text { font-size: 0.9rem; }
+
+/* Highlighted drug name corrections */
+.transcript-text .error   { background: #ffcdd2; border-radius: 3px; padding: 0 2px; }
+.transcript-text .correct { background: #c8e6c9; border-radius: 3px; padding: 0 2px; }
+
+/* WER chip */
+.wer-chip {
+  background: #f0f0f0;
+  border-radius: 999px;
+  padding: 0.1rem 0.5rem;
+  font-size: 0.75rem;
+  color: #444;
+}
+
+/* Fix details */
+.fix-details summary {
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: #464feb;
+  user-select: none;
+}
+.fix-payload {
+  margin-top: 0.5rem;
+  background: #f5f5f5;
+  border-radius: 6px;
+  padding: 0.75rem;
+  font-size: 0.78rem;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+}

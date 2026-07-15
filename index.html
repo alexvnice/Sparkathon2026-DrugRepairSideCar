@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Drug Repair Sidecar — ASR Demo</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<header>
+  <h1>Drug Repair Sidecar</h1>
+  <p class="subtitle">ASR post-processing pipeline that corrects drug name transcription errors</p>
+</header>
+
+<main>
+
+  <!-- ── Summary metrics strip ── -->
+  <section id="metrics-summary">
+    <div class="metric-card">
+      <span class="metric-value" id="wer-before">—</span>
+      <span class="metric-label">WER Before</span>
+    </div>
+    <div class="metric-card highlight">
+      <span class="metric-value" id="wer-after">—</span>
+      <span class="metric-label">WER After</span>
+    </div>
+    <div class="metric-card">
+      <span class="metric-value" id="drug-wer-before">—</span>
+      <span class="metric-label">Drug WER Before</span>
+    </div>
+    <div class="metric-card highlight">
+      <span class="metric-value" id="drug-wer-after">—</span>
+      <span class="metric-label">Drug WER After</span>
+    </div>
+  </section>
+
+  <!-- ── Filter bar ── -->
+  <section id="filters">
+    <label>Fix type:</label>
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="text-postprocess">Text Post-process</button>
+    <button class="filter-btn" data-filter="term-boost">Term Boost</button>
+    <button class="filter-btn" data-filter="redecode">Re-decode</button>
+    <button class="filter-btn" data-filter="prompt-history">Prompt / History</button>
+  </section>
+
+  <!-- ── Demo cards (populated by app.js) ── -->
+  <section id="demo-grid"></section>
+
+</main>
+
+<!-- ── Card template (hidden) ── -->
+<template id="card-template">
+  <article class="demo-card">
+    <div class="card-header">
+      <span class="fix-badge"></span>
+      <span class="case-id"></span>
+    </div>
+
+    <div class="audio-row">
+      <label>Audio</label>
+      <audio controls preload="none">
+        <source type="audio/wav" />
+        Your browser does not support the audio element.
+      </audio>
+    </div>
+
+    <div class="transcript-compare">
+      <div class="transcript-block before">
+        <h3>Before <span class="wer-chip"></span></h3>
+        <p class="transcript-text"></p>
+      </div>
+      <div class="transcript-block after">
+        <h3>After <span class="wer-chip"></span></h3>
+        <p class="transcript-text"></p>
+      </div>
+    </div>
+
+    <details class="fix-details">
+      <summary>Fix details</summary>
+      <pre class="fix-payload"></pre>
+    </details>
+  </article>
+</template>
+
+<script src="app.js"></script>
+</body>
+</html>

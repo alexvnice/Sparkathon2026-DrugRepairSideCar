@@ -1,0 +1,93 @@
+{
+  "summary": {
+    "wer_before": 0.312,
+    "wer_after":  0.187,
+    "drug_wer_before": 0.541,
+    "drug_wer_after":  0.112
+  },
+  "cases": [
+    {
+      "id": "case-001",
+      "fix_type": "text-postprocess",
+      "audio": "audio/case001.wav",
+      "reference":   "the patient was prescribed metformin 500 milligrams twice daily",
+      "before":      "the patient was prescribed met forming 500 milligrams twice daily",
+      "after":       "the patient was prescribed metformin 500 milligrams twice daily",
+      "wer_before":  0.143,
+      "wer_after":   0.0,
+      "fix_detail": {
+        "method": "dictionary_lookup",
+        "matched_fragment": "met forming",
+        "canonical_form":   "metformin",
+        "confidence":       0.97
+      }
+    },
+    {
+      "id": "case-002",
+      "fix_type": "term-boost",
+      "audio": "audio/case002.wav",
+      "reference":   "administer lisinopril 10 milligrams once daily",
+      "before":      "administer listen a pearl 10 milligrams once daily",
+      "after":       "administer lisinopril 10 milligrams once daily",
+      "wer_before":  0.286,
+      "wer_after":   0.0,
+      "fix_detail": {
+        "method":       "hotword_boost",
+        "boosted_terms": ["lisinopril"],
+        "boost_weight":  12.5,
+        "decoder":       "whisper-medium"
+      }
+    },
+    {
+      "id": "case-003",
+      "fix_type": "redecode",
+      "audio": "audio/case003.wav",
+      "reference":   "give 40 milligrams of atorvastatin at bedtime",
+      "before":      "give 40 milligrams of at tour vast a tin at bedtime",
+      "after":       "give 40 milligrams of atorvastatin at bedtime",
+      "wer_before":  0.444,
+      "wer_after":   0.0,
+      "fix_detail": {
+        "method":          "segment_redecode",
+        "segment_start_s": 1.4,
+        "segment_end_s":   2.9,
+        "decoder_config": {
+          "model":         "whisper-large-v3",
+          "language":      "en",
+          "prompt":        "atorvastatin"
+        }
+      }
+    },
+    {
+      "id": "case-004",
+      "fix_type": "prompt-history",
+      "audio": "audio/case004.wav",
+      "reference":   "continue warfarin 5 milligrams as previously discussed",
+      "before":      "continue war for in 5 milligrams as previously discussed",
+      "after":       "continue warfarin 5 milligrams as previously discussed",
+      "wer_before":  0.222,
+      "wer_after":   0.0,
+      "fix_detail": {
+        "method":          "conversation_history_injection",
+        "injected_context": "Medications discussed: warfarin, aspirin, metoprolol.",
+        "history_turns":    2
+      }
+    },
+    {
+      "id": "case-005",
+      "fix_type": "text-postprocess",
+      "audio": "audio/case005.wav",
+      "reference":   "the dose of amoxicillin is 875 milligrams",
+      "before":      "the dose of a moxie ceiling is 875 milligrams",
+      "after":       "the dose of amoxicillin is 875 milligrams",
+      "wer_before":  0.222,
+      "wer_after":   0.0,
+      "fix_detail": {
+        "method":           "phonetic_edit_distance",
+        "matched_fragment": "a moxie ceiling",
+        "canonical_form":   "amoxicillin",
+        "edit_distance":    3
+      }
+    }
+  ]
+}
