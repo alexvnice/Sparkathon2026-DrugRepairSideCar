@@ -6,3 +6,5 @@ Thumbs.db
 # Local dev
 *.log
 node_modules/
+.wrangler/
+.dev.vars
