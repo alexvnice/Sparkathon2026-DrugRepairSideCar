@@ -3,15 +3,39 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Drug Repair Sidecar — ASR Demo</title>
+  <title>Drug repair sidecar — NiCE Sparkathon 2026</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
 <header>
-  <h1>Drug Repair Sidecar</h1>
-  <p class="subtitle">ASR post-processing pipeline that corrects drug name transcription errors</p>
+  <h1>Drug repair sidecar</h1>
+  <p class="subtitle">v11 ASR drug name repair — from 69% to 98.6% recall, zero false positives, no added infrastructure</p>
 </header>
+
+<!-- ── Problem strip (full-width, dark) ── -->
+<section id="problem-strip">
+  <p class="problem-headline">v11 transcribes millions of calls accurately. Medical terminology breaks it.</p>
+  <p class="problem-why">Drug names are phonetically unpredictable — they fragment across word boundaries in ways standard ASR training data never covers. A formulary has thousands of active compounds; even a single specialist practice might use hundreds. v11's boost list caps at around 50 terms. Boosting your way out of this doesn't scale.</p>
+  <div class="problem-examples">
+    <button class="problem-pill" data-card="D2-ENG52-tramadol">
+      <span class="pill-garbled">trauma doll</span>
+      <span class="pill-arrow">→</span>
+      <span class="pill-correct">tramadol</span>
+    </button>
+    <button class="problem-pill" data-card="D2-ENG99-schistosomiasis">
+      <span class="pill-garbled">still so me aces</span>
+      <span class="pill-arrow">→</span>
+      <span class="pill-correct">schistosomiasis</span>
+    </button>
+    <button class="problem-pill" data-card="D1-DR1-21r-claire-pettigrew">
+      <span class="pill-garbled">Claire Pettigrew</span>
+      <span class="pill-arrow">→</span>
+      <span class="pill-correct">clopidogrel</span>
+    </button>
+  </div>
+  <p class="problem-note">The sidecar fixes this without touching the model — and the same chassis works across legal, financial, and contact center domains.</p>
+</section>
 
 <main>
 
@@ -19,20 +43,55 @@
   <section id="metrics-summary">
     <div class="metric-card">
       <span class="metric-value" id="wer-before">—</span>
-      <span class="metric-label">WER Before</span>
+      <span class="metric-label">Recall Before (Synthetic speech)</span>
     </div>
     <div class="metric-card highlight">
       <span class="metric-value" id="wer-after">—</span>
-      <span class="metric-label">WER After</span>
+      <span class="metric-label">Recall After (Synthetic speech)</span>
     </div>
     <div class="metric-card">
       <span class="metric-value" id="drug-wer-before">—</span>
-      <span class="metric-label">Drug WER Before</span>
+      <span class="metric-label">Recall Before (Human speech)</span>
     </div>
     <div class="metric-card highlight">
       <span class="metric-value" id="drug-wer-after">—</span>
-      <span class="metric-label">Drug WER After</span>
+      <span class="metric-label">Recall After (Human speech)</span>
     </div>
+  </section>
+
+  <!-- ── Approach advantages ── -->
+  <section id="approach-cards">
+    <div class="approach-grid">
+      <div class="approach-card">
+        <h3>Transparent proxy</h3>
+        <p>Sits between v11 and your downstream consumer. No changes to the model, the client, or the integration contract.</p>
+      </div>
+      <div class="approach-card">
+        <h3>Layered repair</h3>
+        <p>Text-first phonetic path handles 95.7% of errors in under 35ms. Audio re-decode kicks in only for the hard cases.</p>
+      </div>
+      <div class="approach-card">
+        <h3>Zero false positives</h3>
+        <p>Context gate and suspect detection mean the pipeline only fires in medical context. Silence beats a wrong correction.</p>
+      </div>
+      <div class="approach-card">
+        <h3>No new infrastructure</h3>
+        <p>Re-decode reuses the v11 instance already in production. The sidecar's text path runs CPU-only.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Charts ── -->
+  <section id="charts-section">
+    <figure class="chart-figure">
+      <img src="chart_recovery.svg" alt="Stacked horizontal bar chart showing drug name recovery composition per dataset" />
+    </figure>
+    <figure class="chart-figure">
+      <img src="chart_progression.svg" alt="Vertical bar chart showing synthetic speech cumulative recall by engineering stage" />
+    </figure>
+    <figure class="chart-figure">
+      <img src="chart_progression_human.svg" alt="Vertical bar chart showing human speech cumulative recall by engineering stage" />
+    </figure>
   </section>
 
   <!-- ── Filter bar ── -->
@@ -47,6 +106,82 @@
 
   <!-- ── Demo cards (populated by app.js) ── -->
   <section id="demo-grid"></section>
+
+  <!-- ── Platform generality ── -->
+  <section id="platform-section">
+    <h2 class="section-heading">Beyond healthcare</h2>
+    <p class="section-intro">The repair chassis is domain-agnostic. We ran the same pipeline against three non-medical datasets as a proof of concept — swapping only the vocabulary index.</p>
+    <div class="platform-grid">
+      <div class="platform-card">
+        <div class="platform-card-header">
+          <h3>Legal</h3>
+          <span class="platform-gain">+10.6pp</span>
+        </div>
+        <p class="platform-stats-line">85.2% → 95.8% &nbsp;·&nbsp; SCOTUS oral arguments</p>
+        <p>Latin and French legal terms are phonetically unpredictable — the same multi-word sliding window that catches "time for a tweet" catches "ultra vires" and "stare decisis."</p>
+        <div class="platform-terms">
+          <span class="term-pill">certiorari</span>
+          <span class="term-pill">ultra vires</span>
+          <span class="term-pill">Section 10(b)</span>
+          <span class="term-pill">stare decisis</span>
+          <span class="term-pill">Auer deference</span>
+          <span class="term-pill">Kisor</span>
+        </div>
+      </div>
+      <div class="platform-card">
+        <div class="platform-card-header">
+          <h3>Financial</h3>
+          <span class="platform-gain">+8.5pp</span>
+        </div>
+        <p class="platform-stats-line">85.3% → 93.8% &nbsp;·&nbsp; SPGISpeech earnings calls</p>
+        <p>Acronym-heavy financial vocabulary — EBITDA, GAAP, year-over-year — follows the same out-of-vocabulary pattern as drug names in ASR output.</p>
+        <div class="platform-terms">
+          <span class="term-pill">EBITDA</span>
+          <span class="term-pill">EBITDA margin</span>
+          <span class="term-pill">year-over-year</span>
+          <span class="term-pill">GAAP</span>
+        </div>
+      </div>
+      <div class="platform-card">
+        <div class="platform-card-header">
+          <h3>Contact center</h3>
+          <span class="platform-gain">+3.7pp</span>
+        </div>
+        <p class="platform-stats-line">92.6% → 96.3% &nbsp;·&nbsp; Apptek AU English calls</p>
+        <p>v11 handles everyday contact center vocabulary well — the strong baseline reflects that. Repair adds a further lift on specialist terms like policy holder and superannuation.</p>
+        <div class="platform-terms">
+          <span class="term-pill">policy holder</span>
+          <span class="term-pill">superannuation</span>
+          <span class="term-pill">investment loan</span>
+        </div>
+      </div>
+    </div>
+    <figure class="chart-figure" style="margin-top:1.5rem">
+      <img src="chart_domain_comparison.svg" alt="Horizontal grouped bar chart showing v11 baseline vs after-repair recall across all five benchmarked domains" />
+    </figure>
+    <p class="platform-disclaimer">Proof of concept — threshold tuning for short common words is the next step before production use in non-medical domains. Some false positives were observed on ambiguous short-word matches.</p>
+  </section>
+
+  <!-- ── Spanish bilingual signal (hidden — remove display:none to enable) ── -->
+  <section id="spanish-section" style="display:none">
+    <h2 class="section-heading">Bilingual signal</h2>
+    <p class="section-intro">On matched WHO health topics, v11 on Spanish audio captures drug names at 99.3% vs 84.8% for English — a 14.5pp gap on the same content.</p>
+    <div class="spanish-stats">
+      <div class="spanish-stat">
+        <span class="stat-value">84.8%</span>
+        <span class="stat-label">English capture rate</span>
+      </div>
+      <div class="spanish-stat highlight">
+        <span class="stat-value">99.3%</span>
+        <span class="stat-label">Spanish capture rate</span>
+      </div>
+      <div class="spanish-stat">
+        <span class="stat-value">+14.5pp</span>
+        <span class="stat-label">Gap (same content)</span>
+      </div>
+    </div>
+    <p class="spanish-note">A cross-language decode check could act as a repair signal for English misses in bilingual calls. Pipeline integration pending.</p>
+  </section>
 
 </main>
 
@@ -83,6 +218,8 @@
     </details>
   </article>
 </template>
+
+<button id="back-to-top" aria-label="Back to top">↑ Top</button>
 
 <script src="app.js"></script>
 </body>

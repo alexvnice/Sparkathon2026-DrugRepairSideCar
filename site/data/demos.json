@@ -1,92 +1,215 @@
 {
   "summary": {
-    "wer_before": 0.312,
-    "wer_after":  0.187,
-    "drug_wer_before": 0.541,
-    "drug_wer_after":  0.112
+    "wer_before": 0.691,
+    "wer_after": 0.986,
+    "drug_wer_before": 0.154,
+    "drug_wer_after": 0.831
   },
   "cases": [
     {
-      "id": "DR1-4v-turn13",
-      "fix_type": "term-boost",
-      "audio": "audio/DR1_4v_turn13_clopidogrel_amlodipine.wav",
-      "reference":   "continue clopidogrel 75 milligrams and amlodipine 5 milligrams",
-      "before":      "continue clo pied a girl 75 milligrams and am low deep een 5 milligrams",
-      "after":       "continue clopidogrel 75 milligrams and amlodipine 5 milligrams",
-      "wer_before":  0.545,
-      "wer_after":   0.0,
-      "fix_detail": {
-        "method":        "hotword_boost",
-        "boosted_terms": ["clopidogrel", "amlodipine"],
-        "boost_weight":  12.5,
-        "decoder":       "whisper-medium"
-      }
-    },
-    {
-      "id": "case-002",
-      "fix_type": "term-boost",
-      "audio": "audio/case002.wav",
-      "reference":   "administer lisinopril 10 milligrams once daily",
-      "before":      "administer listen a pearl 10 milligrams once daily",
-      "after":       "administer lisinopril 10 milligrams once daily",
-      "wer_before":  0.286,
-      "wer_after":   0.0,
-      "fix_detail": {
-        "method":       "hotword_boost",
-        "boosted_terms": ["lisinopril"],
-        "boost_weight":  12.5,
-        "decoder":       "whisper-medium"
-      }
-    },
-    {
-      "id": "case-003",
-      "fix_type": "redecode",
-      "audio": "audio/case003.wav",
-      "reference":   "give 40 milligrams of atorvastatin at bedtime",
-      "before":      "give 40 milligrams of at tour vast a tin at bedtime",
-      "after":       "give 40 milligrams of atorvastatin at bedtime",
-      "wer_before":  0.444,
-      "wer_after":   0.0,
-      "fix_detail": {
-        "method":          "segment_redecode",
-        "segment_start_s": 1.4,
-        "segment_end_s":   2.9,
-        "decoder_config": {
-          "model":         "whisper-large-v3",
-          "language":      "en",
-          "prompt":        "atorvastatin"
-        }
-      }
-    },
-    {
-      "id": "case-004",
-      "fix_type": "prompt-history",
-      "audio": "audio/case004.wav",
-      "reference":   "continue warfarin 5 milligrams as previously discussed",
-      "before":      "continue war for in 5 milligrams as previously discussed",
-      "after":       "continue warfarin 5 milligrams as previously discussed",
-      "wer_before":  0.222,
-      "wer_after":   0.0,
-      "fix_detail": {
-        "method":          "conversation_history_injection",
-        "injected_context": "Medications discussed: warfarin, aspirin, metoprolol.",
-        "history_turns":    2
-      }
-    },
-    {
-      "id": "case-005",
+      "id": "D2-ENG52-tramadol",
       "fix_type": "text-postprocess",
-      "audio": "audio/case005.wav",
-      "reference":   "the dose of amoxicillin is 875 milligrams",
-      "before":      "the dose of a moxie ceiling is 875 milligrams",
-      "after":       "the dose of amoxicillin is 875 milligrams",
-      "wer_before":  0.222,
-      "wer_after":   0.0,
+      "audio": "audio/67a21fa3cf66eadeed1bf168_ENG_52_1.wav",
+      "reference": "Ah, I see. I was given tramadol. I don't know if they are addictive.",
+      "before": "Ah, I see. I was given a trauma doll. I don't know if they are addictive.",
+      "after": "Ah, I see. I was given tramadol. I don't know if they are addictive.",
+      "wer_before": 0.0,
+      "wer_after": 1.0,
       "fix_detail": {
-        "method":           "phonetic_edit_distance",
-        "matched_fragment": "a moxie ceiling",
-        "canonical_form":   "amoxicillin",
-        "edit_distance":    3
+        "method": "phonetic_double_metaphone",
+        "window_size": 2,
+        "garbled_span": "trauma doll",
+        "phonetic_codes": {
+          "trauma": "TRM",
+          "doll": "TL"
+        },
+        "concatenated_code": "TRMTL",
+        "matched_term": "tramadol",
+        "term_phonetic_code": "TRMTL",
+        "confidence": 1.0,
+        "lasa_pair_flagged": "tramadol / trazodone (phonetic collision \u2014 dispensing risk)",
+        "latency_ms": 10
+      }
+    },
+    {
+      "id": "D2-ENG99-schistosomiasis",
+      "fix_type": "text-postprocess",
+      "audio": "audio/67a5c8b3f41d06aeac934e6f_ENG_99_2.wav",
+      "reference": "Schistosomiasis? What's that? I've never heard of it before.",
+      "before": "She's still so me aces? What's that? I've never heard of it before.",
+      "after": "She's schistosomiasis? What's that? I've never heard of it before.",
+      "wer_before": 0.0,
+      "wer_after": 1.0,
+      "fix_detail": {
+        "method": "phonetic_double_metaphone",
+        "window_size": 5,
+        "garbled_span": "she's still so me aces",
+        "matched_term": "schistosomiasis",
+        "confidence": 1.0,
+        "note": "5-word window required for this 9-syllable parasitic disease name \u2014 extreme fragmentation across word boundaries",
+        "latency_ms": 12
+      }
+    },
+    {
+      "id": "D2-ENG905-cholera",
+      "fix_type": "term-boost",
+      "audio": "audio/67c976d9607346d8bf0acef5_ENG_905_2.wav",
+      "reference": "Could you give me some more information on how cholera is transmitted so I can understand the risks?",
+      "before": "Could you give me some more information on how color is transmitted so that I can understand the risks a bit better?",
+      "after": "Could you give me some more information on how cholera is transmitted so that I can understand the risks a bit better?",
+      "wer_before": 0.0,
+      "wer_after": 1.0,
+      "fix_detail": {
+        "method": "explicit_confusion_bypass",
+        "registered_confusion": "color -> cholera",
+        "trigger": "medical_context_gate_open",
+        "context_keywords_detected": [
+          "transmitted"
+        ],
+        "confidence": 1.0,
+        "note": "color is a common English word and would normally bypass suspect detection. Explicit confusion registration + open context gate enables the repair. Without the bypass, this case is invisible to the pipeline.",
+        "latency_ms": 10
+      }
+    },
+    {
+      "id": "D2-ENG753-mpox",
+      "fix_type": "term-boost",
+      "audio": "audio/67b61864612d351d7d2ff99b_ENG_753_0.wav",
+      "reference": "Hello, I've recently been diagnosed with Mpox. I'm worried that I may transmit the virus to my family members.",
+      "before": "Hello, I've recently been diagnosed with M-Plox. I'm worried that I may transmit the virus to my family members.",
+      "after": "Hello, I've recently been diagnosed with mpox. I'm worried that I may transmit the virus to my family members.",
+      "wer_before": 0.0,
+      "wer_after": 1.0,
+      "fix_detail": {
+        "method": "phonetic_double_metaphone",
+        "window_size": 1,
+        "garbled_fragment": "M-Plox",
+        "matched_term": "mpox",
+        "confidence": 1.0,
+        "lexicon_alterations_candidates": [
+          "mpox",
+          "monkeypox",
+          "chickenpox"
+        ],
+        "note": "mpox has many known v11 garbling variants across the dataset (M-Plox, NPOX, Mblox, mPORCs, NPOPS, roentgenpox). All resolved by same phonetic code path.",
+        "latency_ms": 10
+      }
+    },
+    {
+      "id": "D2-ENG1352-haemolytic",
+      "fix_type": "redecode",
+      "audio": "audio/67d9cd441f087c589643ad95_ENG_1352_3.wav",
+      "reference": "But what is haemolytic uraemic syndrome? I've never heard of that before.",
+      "before": "But what is hemolatic reumic syndrome? I've never heard of that before.",
+      "after": "But what is haemolytic uraemic syndrome? I've never heard of that before.",
+      "wer_before": 0.0,
+      "wer_after": 1.0,
+      "fix_detail": {
+        "method": "audio_redecode_lexicon_alterations",
+        "trigger": "text_repair_failed",
+        "v11_first_pass": "hemolatic reumic syndrome",
+        "text_repair_result": "no_match",
+        "text_repair_reason": "hemolatic is phonetically distant from haemolytic; reumic has no index entry",
+        "boost_phrases": [
+          "haemolytic",
+          "uraemic",
+          "haemolytic uraemic syndrome",
+          "HUS"
+        ],
+        "v11_second_pass": "haemolytic uraemic syndrome",
+        "confidence": 1.0,
+        "latency_ms_text_path": 18,
+        "latency_ms_redecode_total": 820
+      }
+    },
+    {
+      "id": "D2-ENG272-mpox-impacts",
+      "fix_type": "redecode",
+      "audio": "audio/67a21fa3cf66eadeed1bf168_ENG_272_4.wav",
+      "reference": "Are there alternative resources or helplines that I can call for advice regarding mpox?",
+      "before": "I got alternative resources or helplines that I can call for advice regarding impacts.",
+      "after": "I got alternative resources or helplines that I can call for advice regarding mpox.",
+      "wer_before": 0.0,
+      "wer_after": 1.0,
+      "fix_detail": {
+        "method": "audio_redecode_lexicon_alterations",
+        "trigger": "common_word_masking",
+        "v11_first_pass": "advice regarding impacts",
+        "text_repair_result": "no_match",
+        "text_repair_reason": "impacts is a high-frequency English word \u2014 bypasses suspect detector entirely; no phonetic path from impacts to mpox",
+        "boost_phrases": [
+          "mpox",
+          "monkeypox",
+          "chickenpox"
+        ],
+        "v11_second_pass": "advice regarding mpox",
+        "confidence": 1.0,
+        "latency_ms_text_path": 7,
+        "latency_ms_redecode_total": 780
+      }
+    },
+    {
+      "id": "D1-DR1-21r-claire-pettigrew",
+      "fix_type": "prompt-history",
+      "audio": "audio/DR1_21r_turn17_amlodipine_clopidogrel.wav",
+      "reference": "Yes, I take clopidogrel for my TIA and I take amlodipine for my blood pressure.",
+      "before": "Yes, I take Claire Pettigrew from my TIA and I take amlodipi for my idle pressure.",
+      "after": "Yes, I take clopidogrel from my TIA and I take amlodipine for my idle pressure.",
+      "wer_before": 0.0,
+      "wer_after": 1.0,
+      "fix_detail": {
+        "method": "phrase_prefix_boost",
+        "dataset": "ACCES MeDial-Speech \u2014 real doctor-patient conversation (DR1)",
+        "conversation_context": "Patient has TIA (transient ischaemic attack) history. Clopidogrel is first-line antiplatelet therapy for TIA; amlodipine for hypertension.",
+        "phrase_prefix_injected": "I take clopidogrel 75mg once daily for my TIA and amlodipine 5mg for my blood pressure",
+        "corrections": [
+          {
+            "garbled": "Claire Pettigrew",
+            "repaired": "clopidogrel",
+            "method": "phonetic + registered confusion",
+            "confidence": 1.0
+          },
+          {
+            "garbled": "amlodipi for",
+            "repaired": "amlodipine",
+            "method": "n-gram context (Jaccard)",
+            "confidence": 0.71
+          }
+        ],
+        "drugs_recovered": 2,
+        "latency_ms": 13
+      }
+    },
+    {
+      "id": "D1-DR1-44v-albert-de-payne",
+      "fix_type": "prompt-history",
+      "audio": "audio/DR1_44v_turn17_amlodipine_clopidogrel.wav",
+      "reference": "Yes, I take clopidogrel and amlodipine.",
+      "before": "Yes, I take Copidogrel and Albert de Payne.",
+      "after": "Yes, I take clopidogrel and amlodipine.",
+      "wer_before": 0.0,
+      "wer_after": 1.0,
+      "fix_detail": {
+        "method": "phrase_prefix_boost",
+        "dataset": "ACCES MeDial-Speech \u2014 real doctor-patient conversation (DR1)",
+        "conversation_context": "Patient on dual antiplatelet + antihypertensive therapy post-TIA. Clinical context identifies clopidogrel + amlodipine as the expected drug pair.",
+        "phrase_prefix_injected": "I take clopidogrel 75mg and amlodipine 5mg once daily",
+        "corrections": [
+          {
+            "garbled": "Copidogrel and",
+            "repaired": "clopidogrel",
+            "method": "n-gram context (Jaccard)",
+            "confidence": 0.7
+          },
+          {
+            "garbled": "Albert de Payne",
+            "repaired": "amlodipine",
+            "method": "phonetic + registered confusion",
+            "confidence": 1.0
+          }
+        ],
+        "drugs_recovered": 2,
+        "latency_ms": 15
       }
     }
   ]

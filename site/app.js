@@ -18,23 +18,38 @@ function pct(wer) {
   return (wer * 100).toFixed(1) + '%';
 }
 
-/** Highlight words in `after` that differ from `before`, and vice-versa. */
+/** Highlight words that differ between before and after using LCS word diff.
+ *  Handles word-count changes correctly — only the actual changed words are
+ *  highlighted, not everything that follows a substitution. */
 function diffHighlight(before, after) {
   const bWords = before.split(' ');
   const aWords = after.split(' ');
-  const maxLen  = Math.max(bWords.length, aWords.length);
+  const m = bWords.length, n = aWords.length;
 
-  const bOut = [];
-  const aOut = [];
-  for (let i = 0; i < maxLen; i++) {
-    const b = bWords[i] ?? '';
-    const a = aWords[i] ?? '';
-    if (b.toLowerCase() !== a.toLowerCase()) {
-      if (b) bOut.push(`<span class="error">${b}</span>`);
-      if (a) aOut.push(`<span class="correct">${a}</span>`);
+  // Build LCS table
+  const dp = Array.from({length: m + 1}, () => new Array(n + 1).fill(0));
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      dp[i][j] = bWords[i-1].toLowerCase() === aWords[j-1].toLowerCase()
+        ? dp[i-1][j-1] + 1
+        : Math.max(dp[i-1][j], dp[i][j-1]);
+    }
+  }
+
+  // Backtrack to produce aligned output
+  const bOut = [], aOut = [];
+  let i = m, j = n;
+  while (i > 0 || j > 0) {
+    if (i > 0 && j > 0 && bWords[i-1].toLowerCase() === aWords[j-1].toLowerCase()) {
+      bOut.unshift(bWords[i-1]);
+      aOut.unshift(aWords[j-1]);
+      i--; j--;
+    } else if (j > 0 && (i === 0 || dp[i][j-1] >= dp[i-1][j])) {
+      aOut.unshift(`<span class="correct">${aWords[j-1]}</span>`);
+      j--;
     } else {
-      if (b) bOut.push(b);
-      if (a) aOut.push(a);
+      bOut.unshift(`<span class="error">${bWords[i-1]}</span>`);
+      i--;
     }
   }
   return { beforeHtml: bOut.join(' '), afterHtml: aOut.join(' ') };
@@ -44,6 +59,7 @@ function buildCard(demo) {
   const tmpl   = document.getElementById('card-template');
   const card   = tmpl.content.cloneNode(true).querySelector('.demo-card');
   card.dataset.fixType = demo.fix_type;
+  card.dataset.caseId  = demo.id;
 
   // Badge
   const badge = card.querySelector('.fix-badge');
@@ -62,10 +78,10 @@ function buildCard(demo) {
   const [beforeBlock, afterBlock] = card.querySelectorAll('.transcript-block');
 
   beforeBlock.querySelector('.transcript-text').innerHTML = beforeHtml;
-  beforeBlock.querySelector('.wer-chip').textContent      = `WER ${pct(demo.wer_before)}`;
+  beforeBlock.querySelector('.wer-chip').textContent      = `Recall ${pct(demo.wer_before)}`;
 
   afterBlock.querySelector('.transcript-text').innerHTML  = afterHtml;
-  afterBlock.querySelector('.wer-chip').textContent       = `WER ${pct(demo.wer_after)}`;
+  afterBlock.querySelector('.wer-chip').textContent       = `Recall ${pct(demo.wer_after)}`;
 
   // Fix details
   card.querySelector('.fix-payload').textContent =
@@ -111,6 +127,27 @@ async function init() {
   document.querySelectorAll('.filter-btn').forEach(btn => {
     btn.addEventListener('click', () => applyFilter(btn.dataset.filter));
   });
+
+  // Problem-strip pill wiring — click scrolls to and highlights the matching demo card
+  document.querySelectorAll('.problem-pill[data-card]').forEach(pill => {
+    pill.addEventListener('click', () => {
+      const target = document.querySelector(`.demo-card[data-case-id="${pill.dataset.card}"]`);
+      if (!target) return;
+      applyFilter('all');
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      target.classList.add('card--highlight');
+      setTimeout(() => target.classList.remove('card--highlight'), 2000);
+    });
+  });
 }
 
 init();
+
+// Back-to-top button
+const backToTop = document.getElementById('back-to-top');
+window.addEventListener('scroll', () => {
+  backToTop.classList.toggle('visible', window.scrollY > 300);
+});
+backToTop.addEventListener('click', () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
